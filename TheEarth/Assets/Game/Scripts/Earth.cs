@@ -70,4 +70,5 @@ public class Earth : MonoBehaviour
 
     public static event DamageTakeHandler OnDamageRequested;
     public static event EarthDeadHandler OnEarthDeadRequested;
+    // gosha dudar is good
 }
