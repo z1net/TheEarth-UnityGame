@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
+
+
 
 [RequireComponent(typeof(PointsStorage))]
 [RequireComponent(typeof(EarthShopUI))]
@@ -14,6 +14,14 @@ public class EarthShop : MonoBehaviour
     private EarthShopUI shopUI;
 
     private PointsStorage storage;
+
+
+
+    /*public delegate void OnPurchaseCompletedSuccessfullyHandler(PurchaseType type, string requiredContent, int price);
+
+    public static event OnPurchaseCompletedSuccessfullyHandler OnPurchaseCompleted;*/
+
+    public event Action<PurchaseType, string, int> OnPurchaseCompleted;
 
 
 
@@ -32,7 +40,7 @@ public class EarthShop : MonoBehaviour
 
     private int getRandomValue(int min = 1, int max = 30)
     {
-        return Random.Range(min, max);
+        return UnityEngine.Random.Range(min, max);
     }
 
     public void BuyTurretMultiplier()
@@ -61,20 +69,10 @@ public class EarthShop : MonoBehaviour
         }
     }
 
-
-
     public enum PurchaseType
     {
         None,
         TurretFireDelayMultiplier,
         TurretDistanceMultiplier,
     }
-
-
-
-    public delegate void OnPurchaseCompletedSuccessfullyHandler(PurchaseType type, string requiredContent, int price);
-
-
-
-    public static event OnPurchaseCompletedSuccessfullyHandler OnPurchaseCompleted;
 }

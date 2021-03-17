@@ -526,6 +526,7 @@ MonoBehaviour:
   turret: {fileID: 1710586506}
   pauseManager: {fileID: 519420030}
   spawner: {fileID: 662613320}
+  shop: {fileID: 519420036}
 --- !u!114 &519420036
 MonoBehaviour:
   m_ObjectHideFlags: 0

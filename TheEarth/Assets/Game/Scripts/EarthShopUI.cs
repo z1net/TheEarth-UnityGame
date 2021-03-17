@@ -20,6 +20,8 @@ public class EarthShopUI : MonoBehaviour
 
     [SerializeField] private AsteroidSpawner spawner;
 
+    [SerializeField] private EarthShop shop;
+
 
 
     private PointsStorage storage;
@@ -39,7 +41,7 @@ public class EarthShopUI : MonoBehaviour
 
     private void OnEnable()
     {
-        OnPurchaseCompleted += onPurchaseCompleted;
+        shop.OnPurchaseCompleted += onPurchaseCompleted;
 
 
 
@@ -50,7 +52,7 @@ public class EarthShopUI : MonoBehaviour
 
     private void OnDisable()
     {
-        OnPurchaseCompleted -= onPurchaseCompleted;
+        shop.OnPurchaseCompleted -= onPurchaseCompleted;
 
 
 
