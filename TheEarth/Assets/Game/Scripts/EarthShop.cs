@@ -17,10 +17,6 @@ public class EarthShop : MonoBehaviour
 
 
 
-    /*public delegate void OnPurchaseCompletedSuccessfullyHandler(PurchaseType type, string requiredContent, int price);
-
-    public static event OnPurchaseCompletedSuccessfullyHandler OnPurchaseCompleted;*/
-
     public event Action<PurchaseType, string, int> OnPurchaseCompleted;
 
 
