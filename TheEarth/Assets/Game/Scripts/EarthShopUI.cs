@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using static EarthShop;
+
+
 
 [RequireComponent(typeof(PointsUI))]
 [RequireComponent(typeof(PointsStorage))]
@@ -13,6 +13,14 @@ public class EarthShopUI : MonoBehaviour
     [SerializeField] private Text turretDistanceMultipliertText;
 
     [SerializeField] private GameObject shopPanel;
+
+    [SerializeField] private Turret turret;
+
+    [SerializeField] private PauseManager pauseManager;
+
+    [SerializeField] private AsteroidSpawner spawner;
+
+
 
     private PointsStorage storage;
 
@@ -35,8 +43,8 @@ public class EarthShopUI : MonoBehaviour
 
 
 
-        PauseManager.OnPauseSetted += onPauseSetted;
-        PauseManager.OnPauseUnsetted += onPauseUnsetted;
+        pauseManager.OnPauseSetted += onPauseSetted;
+        pauseManager.OnPauseUnsetted += onPauseUnsetted;
     }
 
 
@@ -46,8 +54,8 @@ public class EarthShopUI : MonoBehaviour
 
 
 
-        PauseManager.OnPauseSetted -= onPauseSetted;
-        PauseManager.OnPauseUnsetted -= onPauseUnsetted;
+        pauseManager.OnPauseSetted -= onPauseSetted;
+        pauseManager.OnPauseUnsetted -= onPauseUnsetted;
     }
 
 
@@ -68,9 +76,9 @@ public class EarthShopUI : MonoBehaviour
         {
             ShowTurretMultiplierText(requiredContent);
 
-            Turret.FireDelayMultiplier += 0.2f;
+            turret.FireDelayMultiplier += 0.2f;
 
-            AsteroidSpawner.SpawnerMultiplier += 0.1f;
+            spawner.SpawnerMultiplier += 0.1f;
 
             pointsUI.UpdatePoints(false);
         }
@@ -79,7 +87,7 @@ public class EarthShopUI : MonoBehaviour
         {
             ShowTurretDistanceMultiplierText(requiredContent);
 
-            Turret.ShootMaxDistance += 0.2f;
+            turret.ShootMaxDistance += 0.2f;
 
             pointsUI.UpdatePoints(false);
         }

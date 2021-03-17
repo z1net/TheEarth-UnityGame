@@ -1,25 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
+
+
 
 [RequireComponent(typeof(Earth))]
 public class EarthChanger : MonoBehaviour
 {
     [SerializeField] private Sprite[] earthTypes = new Sprite[9];
 
-    public int CurrentEarthIndex { get; private set; }
+
 
     private Earth earth;
 
 
 
+    public int CurrentEarthIndex { get; private set; }
+
+
+
+    public delegate void OnEarthChangeHandler(Sprite toSprite, ref bool allow);
+
+    public static event OnEarthChangeHandler OnEarthChangeRequested;
+
+
+
     private void Start()
     {
-        CurrentEarthIndex = 1;
-
         earth = GetComponent<Earth>();
+
+        CurrentEarthIndex = 1;
     }
+
+
 
     public void ChangeEarth()
     {
@@ -35,10 +46,4 @@ public class EarthChanger : MonoBehaviour
         CurrentEarthIndex += 1;
         earth.DrawEarth(sprite);
     }
-
-    
-
-    public delegate void OnEarthChangeHandler(Sprite toSprite, ref bool allow);
-
-    public static event OnEarthChangeHandler OnEarthChangeRequested;
 }

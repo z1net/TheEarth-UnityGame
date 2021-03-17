@@ -1,29 +1,38 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
+
+
 
 public class AsteroidClickHandler : MonoBehaviour, IPointerClickHandler
 {
-    public void OnPointerClick(PointerEventData eventData)
+    private PauseManager pauseManager;
+
+
+
+    public delegate void AsteroidClickedHandler(Asteroid asteroid, PointerEventData data, ref bool allow);
+
+    public event AsteroidClickedHandler OnClickRequested;
+
+
+
+    public void OnPointerClick(PointerEventData data)
     {
-        if (!PauseManager.IsGamePaused())
+        if (!pauseManager.IsGamePaused() && data.pointerClick.TryGetComponent(out Asteroid asteroid))
         {
             bool allow = true;
 
-            OnAsteroidClickRequested?.Invoke(gameObject, eventData, ref allow);
+            OnClickRequested?.Invoke(asteroid, data, ref allow);
 
             if (!allow) { return; }
 
-            Destroy(gameObject);
+            Destroy(asteroid.gameObject);
         }
     }
 
 
 
-    public delegate void AsteroidClickedHandler(GameObject clickedObject, PointerEventData data, ref bool allow);
-
-
-
-    public static event AsteroidClickedHandler OnAsteroidClickRequested;
+    public void Initialize(PauseManager pauseManager)
+    {
+        this.pauseManager = pauseManager;
+    }
 }

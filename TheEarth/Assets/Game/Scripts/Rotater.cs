@@ -1,19 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+
+
 
 public class Rotater : MonoBehaviour
 {
     [SerializeField] private float rotationSpeed;
 
-    [HideInInspector] public float SpeedMultiplier { get; set; } = 1;
+
 
     private Image currentTarget;
 
     private float currentSpeed;
 
+    private PauseManager pauseManager;
 
+
+
+    public float SpeedMultiplier { get; private set; } = 1;
+
+    
 
     private void Start()
     {
@@ -22,11 +28,18 @@ public class Rotater : MonoBehaviour
 
     private void Update()
     {
-        if (!PauseManager.IsGamePaused())
+        if (pauseManager != null && !pauseManager.IsGamePaused())
         {
             currentSpeed += rotationSpeed + Time.deltaTime;
 
             currentTarget.transform.rotation = Quaternion.Euler(0, 0, currentSpeed * SpeedMultiplier);
         }
+    }
+
+
+
+    public void Initialize(PauseManager pauseManager)
+    {
+        this.pauseManager = pauseManager;
     }
 }

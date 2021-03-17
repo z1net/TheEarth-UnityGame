@@ -1,13 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+
+
 
 public class PauseManager : MonoBehaviour
 {
     [SerializeField] private Text buildText;
 
-    public static GameState CurrentGameState { get; private set; } = GameState.Play;
+
+
+    public delegate void PauseHandler(ref bool allow);
+    public delegate void PauseUnsetHadnler(ref bool allow);
+
+    public event PauseHandler OnPauseSetRequested;
+    public event PauseUnsetHadnler OnPauseUnsetRequested;
+    public event Action OnPauseSetted;
+    public event Action OnPauseUnsetted;
+
+
+
+    public GameState CurrentGameState { get; private set; } = GameState.Play;
 
 
 
@@ -44,6 +57,8 @@ public class PauseManager : MonoBehaviour
         }
     }
 
+
+
     private void showBuildVersion(bool active = true)
     {
         buildText.gameObject.SetActive(active);
@@ -51,7 +66,9 @@ public class PauseManager : MonoBehaviour
         buildText.text = "Build: " + Application.version;
     }
 
-    public static bool IsGamePaused()
+
+
+    public bool IsGamePaused()
     {
         return CurrentGameState == GameState.Pause;
     }
@@ -62,17 +79,5 @@ public class PauseManager : MonoBehaviour
         Pause
     }
 
-
-
-    public delegate void PauseHandler(ref bool allow);
-    public delegate void PauseUnsetHadnler(ref bool allow);
-    public delegate void PauseSetHandler();
-    public delegate void PauseUnsettedHandler();
-
-
-
-    public static event PauseHandler OnPauseSetRequested;
-    public static event PauseUnsetHadnler OnPauseUnsetRequested;
-    public static event PauseSetHandler OnPauseSetted;
-    public static event PauseUnsettedHandler OnPauseUnsetted;
+    // gosha dudar is good
 }

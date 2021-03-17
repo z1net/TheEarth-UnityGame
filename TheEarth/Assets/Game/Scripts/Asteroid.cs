@@ -1,17 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using UnityEngine.Events;
-using static PauseManager;
 
+
+
+[RequireComponent(typeof(Rotater))]
 public class Asteroid : MonoBehaviour
 {
+    private PauseManager pauseManager;
+
+    private Rotater rotater;
+
+    private AsteroidClickHandler handler;
+
+
+
+    public Rotater Rotater => rotater;
+
+    public AsteroidClickHandler Handler => handler;
+
+
+
+    public event Action OnDestroyed;
+
+
+
+    private void OnEnable()
+    {
+        rotater = GetComponent<Rotater>();
+
+        handler = GetComponent<AsteroidClickHandler>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Earth>(out Earth earth) && !PauseManager.IsGamePaused())
+        if (collision.TryGetComponent(out Earth earth) && !pauseManager.IsGamePaused())
         {
             Destroy(gameObject);
-            OnAsteroidDestroyed?.Invoke();
+            OnDestroyed?.Invoke();
 
             earth.TakeDamage();
         }
@@ -19,8 +44,12 @@ public class Asteroid : MonoBehaviour
 
 
 
-    public delegate void AsteroidDestroyHandler();
+    public void Initialize(PauseManager pauseManager)
+    {
+        this.pauseManager = pauseManager;
 
+        rotater.Initialize(pauseManager);
 
-    public static event AsteroidDestroyHandler OnAsteroidDestroyed;
+        handler.Initialize(pauseManager);
+    }
 }

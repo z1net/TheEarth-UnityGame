@@ -1,12 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+
+
 
 public class PointsStorage : MonoBehaviour
 {
     private int points;
 
+
+
     public int Points => points;
+
+
+
+    public event Action<int> OnPointsChanged;
 
 
 
@@ -21,12 +28,4 @@ public class PointsStorage : MonoBehaviour
     {
         points -= value;
     }
-
-
-
-    public delegate void PointsChangedHandler(int addedValue);
-
-
-
-    public static event PointsChangedHandler OnPointsChanged;
 }

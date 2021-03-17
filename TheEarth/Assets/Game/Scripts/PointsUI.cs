@@ -1,13 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+
 
 [RequireComponent(typeof(PointsStorage))]
 public class PointsUI : MonoBehaviour
 {
+    [SerializeField] private AsteroidSpawner spawner;
+
     [SerializeField] private Text pointsText;
+
+    [SerializeField] private Turret turret;
+
+
 
     private PointsStorage storage;
 
@@ -23,47 +29,42 @@ public class PointsUI : MonoBehaviour
     #region * Events (Sub/Unsub) *
     private void OnEnable()
     {
-        Asteroid.OnAsteroidDestroyed += onAsteroidDestroyed;
+        spawner.OnSpawned += onAsteroidSpawned;
 
-
-
-        AsteroidClickHandler.OnAsteroidClickRequested += onAsteroidClickedHandler;
-
-
-
-        Turret.OnTurretDestroyedAsteroid += onTurretDestroyedAsteroid;
+        turret.OnAsteroidDestroyed += onAsteroidDestroyed;
     }
 
-
+    
 
     private void OnDisable()
     {
-        Asteroid.OnAsteroidDestroyed -= onAsteroidDestroyed;
+        spawner.OnSpawned -= onAsteroidSpawned;
 
-
-
-        AsteroidClickHandler.OnAsteroidClickRequested -= onAsteroidClickedHandler;
-
-
-
-        Turret.OnTurretDestroyedAsteroid -= onTurretDestroyedAsteroid;
+        turret.OnAsteroidDestroyed -= onAsteroidDestroyed;
     }
     #endregion
 
 
 
     #region --- Events ---
+    private void onAsteroidSpawned(Asteroid asteroid)
+    {
+        asteroid.Handler.OnClickRequested += onAsteroidClicked;
+
+        asteroid.OnDestroyed += () =>
+        {
+            UpdatePoints();
+            asteroid.OnDestroyed -= () => { };
+        };
+    }
+
+    private void onAsteroidClicked(Asteroid asteroid, PointerEventData data, ref bool allow)
+    {
+        UpdatePoints();
+        asteroid.Handler.OnClickRequested -= onAsteroidClicked;
+    }
+
     private void onAsteroidDestroyed()
-    {
-        UpdatePoints();
-    }
-
-    private void onAsteroidClickedHandler(GameObject clickedObject, PointerEventData data, ref bool allow)
-    {
-        UpdatePoints();
-    }
-
-    private void onTurretDestroyedAsteroid()
     {
         UpdatePoints();
     }

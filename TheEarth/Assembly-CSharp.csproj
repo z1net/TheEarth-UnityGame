@@ -69,6 +69,7 @@
     <Compile Include="Assets\Game\Scripts\EarthShop.cs" />
     <Compile Include="Assets\Game\Scripts\Asteroid.cs" />
     <Compile Include="Assets\Game\Scripts\AsteroidClickHandler.cs" />
+    <Compile Include="Assets\Game\Scripts\EarthInitialize.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

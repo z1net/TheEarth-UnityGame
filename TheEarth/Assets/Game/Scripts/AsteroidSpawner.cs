@@ -1,26 +1,38 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+
+
 
 public class AsteroidSpawner : MonoBehaviour
 {
     [SerializeField] private float spawnDelay;
 
-    [SerializeField] private GameObject asteroid;
+    [SerializeField] private Asteroid asteroid;
 
     [SerializeField] private Sprite[] asteroidSprites = new Sprite[5];
 
     [SerializeField] private GameObject earth;
 
+    [SerializeField] private PauseManager pauseManager;
+
+
+
     private float lastSpawn;
 
-    public static float SpawnerMultiplier { get; set; } = 1;
+
+
+    public float SpawnerMultiplier { get; set; } = 1;
+
+
+
+    public event Action<Asteroid> OnSpawned;
+
 
 
     private void Update()
     {
-        foreach (GameObject asteroid in GameObject.FindGameObjectsWithTag("Asteroid"))
+        foreach (Asteroid asteroid in FindObjectsOfType(typeof(Asteroid)))
         {
             asteroid?.transform.Translate(earth.transform.position * Time.deltaTime / 5, Space.World);
         }
@@ -31,19 +43,24 @@ public class AsteroidSpawner : MonoBehaviour
         }
     }
 
+
+
     private void spawnAsteroid()
     {
-        int asteroidIndex = Random.Range(0, 4);
+        int asteroidIndex = UnityEngine.Random.Range(0, 4);
 
-        float y = Random.Range(-5, 5);
-
-        Vector2 position = new Vector2(-20, y);
+        Vector2 position = new Vector2(-20, UnityEngine.Random.Range(-5, 5));
 
         Sprite randomAsteroidSprite = asteroidSprites[asteroidIndex];
 
         asteroid.GetComponent<Image>().sprite = randomAsteroidSprite;
 
-        Instantiate(asteroid, position, Quaternion.identity, transform);
+        Asteroid spawned = Instantiate(asteroid, position, Quaternion.identity, transform);
+
+        spawned.Initialize(pauseManager);
+
+        OnSpawned?.Invoke(spawned);
+
         lastSpawn = Time.time;
     }
 }

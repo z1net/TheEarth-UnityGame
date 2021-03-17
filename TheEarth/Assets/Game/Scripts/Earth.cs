@@ -1,17 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+
+
 
 [RequireComponent(typeof(EarthChanger))]
 [RequireComponent(typeof(Image))]
 public class Earth : MonoBehaviour
 {
-    [SerializeField] private GameObject currentEarth => gameObject;
-
     private EarthChanger changerEarth;
 
+
+
     private int currentEarthIndex => changerEarth.CurrentEarthIndex;
+
+
+
+    public delegate void DamageTakeHandler(int currentIndex, int updatedIndex, ref bool allow);
+    public delegate void EarthDeadHandler(int onIndex, ref bool allow);
+
+    public event DamageTakeHandler OnDamageRequested;
+    public event EarthDeadHandler OnDeadRequested;
 
 
 
@@ -19,6 +27,8 @@ public class Earth : MonoBehaviour
     {
         changerEarth = GetComponent<EarthChanger>();
     }
+
+
 
     public void DrawEarth(Sprite sprite)
     {
@@ -36,11 +46,11 @@ public class Earth : MonoBehaviour
 
         if (!allow) { return result; }
 
-        if (value >= 9) // earth is dead
+        if (value >= 9)
         {
             bool allowDead = true;
 
-            OnEarthDeadRequested?.Invoke(value, ref allowDead);
+            OnDeadRequested?.Invoke(value, ref allowDead);
 
             if (!allowDead)
             {
@@ -60,16 +70,6 @@ public class Earth : MonoBehaviour
 
         return result;
     }
-
-
-
-    public delegate void DamageTakeHandler(int currentIndex, int updatedIndex, ref bool allow);
-    public delegate void EarthDeadHandler(int onIndex, ref bool allow);
-
-
-
-    public static event DamageTakeHandler OnDamageRequested;
-    public static event EarthDeadHandler OnEarthDeadRequested;
 
     // gosha dudar is good
 }
